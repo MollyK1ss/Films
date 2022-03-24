@@ -1,0 +1,79 @@
+﻿@page "/reg"
+@using Films.Models
+@inject MyDbContext context
+@inject IJSRuntime JS
+
+@layout EmptyLayout
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+				<EditForm Model="@model" class="login100-form validate-form">
+					<span class="login100-form-title p-b-33">
+						Регистрация
+					</span>
+
+					<div class="wrap-input100 validate-input" style="margin-bottom:15px;" data-validate = "Valid login is required: ex@abc.xyz">
+						<input class="input100" @bind-value = "@model.Login" type="text" name="login" placeholder="Логин">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="wrap-input100 rs1 validate-input" data-validate="Password is required">
+						<input class="input100" @bind-value = "@model.Password" type="password" name="pass" placeholder="Пароль">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="wrap-input100 rs1 validate-input" style="margin-top:15px;" data-validate="Password is required">
+						<input class="input100" @bind-value = "@model.RepPassword" type="password" name="RepPass" placeholder="Введите пароль ещё раз">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="container-login100-form-btn m-t-20">
+						<button type="submit" @onclick="Reg" class="login100-form-btn">
+							Заргестрироваться
+						</button>
+					</div>
+				</EditForm>
+			</div>
+		</div>
+	</div>
+
+@code{
+	class RegModel
+	{
+		public string Login{ get; set; }
+		public string Password{ get; set; }
+		public string RepPassword{ get; set; }
+	}
+	RegModel model = new RegModel();
+	private void Reg()
+	{
+		if(model.Password == model.RepPassword)
+		{
+			if(context.Users.Where(x=>x.Login==model.Login).Count()>0)
+			{
+				JS.InvokeAsync<object>("alert", "Логин занят!");
+			}
+			else
+			{
+				User NewUser = new User();
+				NewUser.Login = model.Login;
+				NewUser.Pass = model.Password;
+
+				context.Users.Add(NewUser);
+				context.SaveChanges();
+			}
+		}
+		else
+		{
+			JS.InvokeAsync<object>("alert", "Пароли не совпадают!");
+		}
+		if(model.Login == null && model.Login == "" && model.Password == null && model.Password == "")
+		{
+			JS.InvokeAsync<object>("alert", "Заполните все поля!");
+		}
+	}
+}

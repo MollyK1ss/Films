@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Registration\Registration.razor.css" />
+    <None Remove="Registration\Registration.razor.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Registration\Registration.razor.css" />
+    <Content Include="Registration\Registration.razor.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
