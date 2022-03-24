@@ -1,13 +1,14 @@
-using Films.Data;
+using Films.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<MyDbContext>(opt => opt.UseNpgsql("Host=localhost; Port=5432; User Id=postgres; Password=sa; Database=films"));
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 

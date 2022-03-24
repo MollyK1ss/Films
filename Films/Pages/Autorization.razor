@@ -1,0 +1,91 @@
+﻿@page "/auth"
+@using Films.Models
+@inject MyDbContext context
+@inject IJSRuntime JS
+
+@layout EmptyLayout
+
+@*<div style="width: 300px; margin: 0 auto;">
+    <EditForm Model="@model">
+    <div>
+        <InputText @bind-Value = "@model.Login" type="text" placeholder="Login"></InputText>
+    </div>
+    <div>
+        <InputText @bind-Value = "@model.Password" type="password" placeholder="Password"></InputText>
+    </div>
+    <div>
+        <button type="submit" @onclick="Login">Войти</button>
+    </div>
+    </EditForm>
+</div>*@
+
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+				<EditForm Model="@model" class="login100-form validate-form">
+					<span class="login100-form-title p-b-33">
+						Account Login
+					</span>
+
+					<div class="wrap-input100 validate-input" style="margin-bottom:15px;" data-validate = "Valid email is required: ex@abc.xyz">
+						<input class="input100" @bind-value = "@model.Login" type="text" name="email" placeholder="Email">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="wrap-input100 rs1 validate-input" data-validate="Password is required">
+						<input class="input100" @bind-value = "@model.Password" type="password" name="pass" placeholder="Password">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="container-login100-form-btn m-t-20">
+						<button type="submit" @onclick="Login" class="login100-form-btn">
+							Войти
+						</button>
+					</div>
+
+					<div class="text-center p-t-45 p-b-4">
+						<span class="txt1">
+							Forgot
+						</span>
+
+						<a href="#" class="txt2 hov1">
+							Username / Password?
+						</a>
+					</div>
+
+					<div class="text-center">
+						<span class="txt1">
+							Создать аккаунт?
+						</span>
+
+						<a href="registration" class="txt2 hov1">
+							Да
+						</a>
+					</div>
+				</EditForm>
+			</div>
+		</div>
+	</div>
+
+@code{
+    class LoginModel
+    {
+        public string Login{ get; set; }
+        public string Password{ get; set; }
+    }
+    LoginModel model = new LoginModel();
+    private void Login()
+    {
+        if(context.Users.Where(x=>x.Login==model.Login && x.Pass==model.Password).Count()>0)
+        {
+            JS.InvokeAsync<object>("alert", "Вы успешно вошли!");
+        }
+        else
+        {
+            JS.InvokeAsync<object>("alert", "Неверный логин или пароль!");
+        }
+    }
+}
